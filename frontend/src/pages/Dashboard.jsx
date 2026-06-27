@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import Sidebar             from '../components/Sidebar'
-import TopBar              from '../components/TopBar'
-import WelcomeCard         from '../components/WelcomeCard'
-import StatsRow            from '../components/StatsRow'
-import TaskList            from '../components/TaskList'
-import NotificationsPanel  from '../components/NotificationsPanel'
-import AddTaskModal        from '../components/AddTaskModal'
-import { useTasks }        from '../hooks/useTasks'
+import Sidebar            from '../components/Sidebar'
+import TopBar             from '../components/TopBar'
+import WelcomeCard        from '../components/WelcomeCard'
+import StatsRow           from '../components/StatsRow'
+import TaskList           from '../components/TaskList'
+import NotificationsPanel from '../components/NotificationsPanel'
+import AddTaskModal       from '../components/AddTaskModal'
+import RescuePlanModal    from '../components/RescuePlanModal'
+import { useTasks }       from '../hooks/useTasks'
+import { useRescue }      from '../hooks/useRescue'
 
 export default function Dashboard() {
   const {
@@ -17,12 +19,26 @@ export default function Dashboard() {
     completedCount,
   } = useTasks()
 
-  const [activeNav,  setActiveNav]  = useState('dashboard')
-  const [showModal,  setShowModal]  = useState(false)
+  const {
+    rescuePlan,
+    loading,
+    error,
+    generatePlan,
+    clearPlan,
+  } = useRescue()
 
-  // Placeholder — will call the AI rescue API in Day 2
+  const [activeNav,   setActiveNav]   = useState('dashboard')
+  const [showModal,   setShowModal]   = useState(false)
+  const [showRescue,  setShowRescue]  = useState(false)
+
   const handleRescue = () => {
-    alert('Rescue Plan coming in Day 2! AI will generate your action plan here.')
+    setShowRescue(true)
+    generatePlan(tasks)
+  }
+
+  const handleCloseRescue = () => {
+    setShowRescue(false)
+    clearPlan()
   }
 
   return (
@@ -55,10 +71,21 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Add Task Modal */}
       {showModal && (
         <AddTaskModal
           onClose={() => setShowModal(false)}
           onAdd={addTask}
+        />
+      )}
+
+      {/* Rescue Plan Modal (Day 2) */}
+      {showRescue && (
+        <RescuePlanModal
+          plan={rescuePlan}
+          loading={loading}
+          error={error}
+          onClose={handleCloseRescue}
         />
       )}
     </div>
