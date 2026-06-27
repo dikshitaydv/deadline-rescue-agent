@@ -1,7 +1,6 @@
-# 🚨 Deadline Rescue Agent
+#  Deadline Rescue Agent
 
 An AI-powered productivity companion that doesn't just remind you — it **intervenes**.  
-Built for the **Vibe2Ship Hackathon**.
 
 ---
 
@@ -68,7 +67,7 @@ deadline-rescue-agent/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone & Install
 
@@ -102,7 +101,7 @@ cd backend  && npm run dev
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend:** React 18, Vite, Tailwind CSS
 - **Backend:** Node.js, Express
