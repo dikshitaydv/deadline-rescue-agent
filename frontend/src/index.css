@@ -436,6 +436,8 @@ input, select { font-family: inherit; }
   width: 440px; max-width: calc(100vw - 32px);
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   animation: modalIn 0.2s ease;
+  max-height: 85vh;        
+  overflow-y: auto;
 }
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(16px) scale(0.97); }
