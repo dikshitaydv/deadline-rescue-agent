@@ -7,6 +7,7 @@ import TaskList           from '../components/TaskList'
 import NotificationsPanel from '../components/NotificationsPanel'
 import AddTaskModal       from '../components/AddTaskModal'
 import RescuePlanModal    from '../components/RescuePlanModal'
+import RescueBanner       from '../components/RescueBanner'
 import { useTasks }       from '../hooks/useTasks'
 import { useRescue }      from '../hooks/useRescue'
 
@@ -27,9 +28,9 @@ export default function Dashboard() {
     clearPlan,
   } = useRescue()
 
-  const [activeNav,   setActiveNav]   = useState('dashboard')
-  const [showModal,   setShowModal]   = useState(false)
-  const [showRescue,  setShowRescue]  = useState(false)
+  const [activeNav,  setActiveNav]  = useState('dashboard')
+  const [showModal,  setShowModal]  = useState(false)
+  const [showRescue, setShowRescue] = useState(false)
 
   const handleRescue = () => {
     setShowRescue(true)
@@ -47,6 +48,9 @@ export default function Dashboard() {
 
       <div className="main-area">
         <TopBar />
+
+        {/* Day 3: Rescue banner — sits below topbar, above content */}
+        <RescueBanner atRiskCount={atRiskCount} onRescue={handleRescue} />
 
         <div className="content-grid">
           {/* Left column */}
@@ -79,7 +83,7 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Rescue Plan Modal (Day 2) */}
+      {/* Rescue Plan Modal */}
       {showRescue && (
         <RescuePlanModal
           plan={rescuePlan}

@@ -1,4 +1,7 @@
 import { EFFORT_COLORS, STATUS_CONFIG, getDaysLeft, getProgressColor } from '../utils/taskHelpers'
+import CoachMessage  from './CoachMessage'
+import StartNowPanel from './StartNowPanel'
+import { useCoach }  from '../hooks/useCoach'
 
 function ProgressBar({ value }) {
   return (
@@ -12,6 +15,8 @@ function ProgressBar({ value }) {
 }
 
 export default function TaskList({ tasks, onUpdateProgress, onAddTask }) {
+  const { activePanelId, togglePanel, closePanel } = useCoach()
+
   return (
     <div className="task-list-section">
       <div className="section-header">
@@ -42,55 +47,77 @@ export default function TaskList({ tasks, onUpdateProgress, onAddTask }) {
 
           {/* Rows */}
           {tasks.map((task) => {
-            const daysLeft = getDaysLeft(task.deadline)
-            const isUrgent = daysLeft === 'Overdue' || daysLeft === 'Today'
-            const sc = STATUS_CONFIG[task.status]  || STATUS_CONFIG['Pending']
-            const ec = EFFORT_COLORS[task.effort]  || EFFORT_COLORS['Medium']
+            const daysLeft  = getDaysLeft(task.deadline)
+            const isUrgent  = daysLeft === 'Overdue' || daysLeft === 'Today'
+            const sc        = STATUS_CONFIG[task.status]  || STATUS_CONFIG['Pending']
+            const ec        = EFFORT_COLORS[task.effort]  || EFFORT_COLORS['Medium']
+            const isAtRisk  = task.status === 'At Risk'
+            const isPanelOpen = activePanelId === task.id
 
             return (
-              <div
-                key={task.id}
-                className={`task-row ${task.status === 'At Risk' ? 'task-row--risk' : ''}`}
-              >
-                {/* Name */}
-                <div className="task-name-cell">
-                  <div className="task-dot" style={{ background: sc.dot }} />
-                  <div>
-                    <p className="task-name">{task.name}</p>
-                    <p className="task-importance">{task.importance}</p>
+              <div key={task.id} className="task-row-wrap">
+                {/* Main row */}
+                <div className={`task-row ${isAtRisk ? 'task-row--risk' : ''}`}>
+                  {/* Name */}
+                  <div className="task-name-cell">
+                    <div className="task-dot" style={{ background: sc.dot }} />
+                    <div>
+                      <p className="task-name">{task.name}</p>
+                      <p className="task-importance">{task.importance}</p>
+                    </div>
+                  </div>
+
+                  {/* Deadline */}
+                  <div className={`task-deadline ${isUrgent ? 'task-deadline--urgent' : ''}`}>
+                    {daysLeft}
+                  </div>
+
+                  {/* Effort */}
+                  <span className="effort-badge" style={{ background: ec.bg, color: ec.text }}>
+                    {task.effort}
+                  </span>
+
+                  {/* Status */}
+                  <span className="status-badge" style={{ background: sc.bg, color: sc.text }}>
+                    <span className="status-dot" style={{ background: sc.dot }} />
+                    {task.status}
+                  </span>
+
+                  {/* Progress + Start Now */}
+                  <div className="progress-cell">
+                    <ProgressBar value={task.progress} />
+                    <span className="progress-pct">{task.progress}%</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={task.progress}
+                      className="progress-slider"
+                      onChange={(e) => onUpdateProgress(task.id, Number(e.target.value))}
+                      title="Drag to update progress"
+                    />
+                    {/* Start Now button — only on at-risk or 0% tasks */}
+                    {(isAtRisk || task.progress === 0) && task.status !== 'Done' && (
+                      <button
+                        className={`start-now-btn ${isPanelOpen ? 'start-now-btn--active' : ''}`}
+                        onClick={() => togglePanel(task.id)}
+                        title="Start Now"
+                      >
+                        {isPanelOpen ? '✕' : '▶'}
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {/* Deadline */}
-                <div className={`task-deadline ${isUrgent ? 'task-deadline--urgent' : ''}`}>
-                  {daysLeft}
-                </div>
+                {/* Coach message — shown for at-risk or overdue tasks */}
+                {(isAtRisk || isUrgent) && task.status !== 'Done' && (
+                  <CoachMessage task={task} />
+                )}
 
-                {/* Effort */}
-                <span className="effort-badge" style={{ background: ec.bg, color: ec.text }}>
-                  {task.effort}
-                </span>
-
-                {/* Status */}
-                <span className="status-badge" style={{ background: sc.bg, color: sc.text }}>
-                  <span className="status-dot" style={{ background: sc.dot }} />
-                  {task.status}
-                </span>
-
-                {/* Progress */}
-                <div className="progress-cell">
-                  <ProgressBar value={task.progress} />
-                  <span className="progress-pct">{task.progress}%</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={task.progress}
-                    className="progress-slider"
-                    onChange={(e) => onUpdateProgress(task.id, Number(e.target.value))}
-                    title="Drag to update progress"
-                  />
-                </div>
+                {/* Start Now expandable panel */}
+                {isPanelOpen && (
+                  <StartNowPanel task={task} onClose={() => closePanel()} />
+                )}
               </div>
             )
           })}
