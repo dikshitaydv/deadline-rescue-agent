@@ -4,64 +4,64 @@ An AI-powered productivity companion that doesn't just remind you — it **inter
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 deadline-rescue-agent/
 │
-├── frontend/                        # React + Vite + Tailwind
+├── frontend/                       
 │   ├── index.html
 │   ├── vite.config.js
 │   ├── tailwind.config.js
 │   ├── postcss.config.js
 │   ├── package.json
 │   └── src/
-│       ├── main.jsx                 # React entry point
-│       ├── App.jsx                  # Root component / router
-│       ├── index.css                # Global styles
+│       ├── main.jsx                 
+│       ├── App.jsx                  
+│       ├── index.css               
 │       │
 │       ├── pages/
-│       │   └── Dashboard.jsx        # Main dashboard page
+│       │   └── Dashboard.jsx        
 │       │
 │       ├── components/
-│       │   ├── Sidebar.jsx          # Left icon nav
-│       │   ├── TopBar.jsx           # Search, date, user avatar
-│       │   ├── WelcomeCard.jsx      # Greeting + quick links
+│       │   ├── Sidebar.jsx          
+│       │   ├── TopBar.jsx           
+│       │   ├── WelcomeCard.jsx      
 │       │   ├── StatsRow.jsx         # 4 metric cards
 │       │   ├── TaskList.jsx         # Task table with progress
-│       │   ├── NotificationsPanel.jsx # Right panel alerts
+│       │   ├── NotificationsPanel.jsx 
 │       │   └── AddTaskModal.jsx     # Add task form modal
 │       │
 │       ├── hooks/
-│       │   └── useTasks.js          # Task state + operations
+│       │   └── useTasks.js         
 │       │
 │       └── utils/
-│           └── taskHelpers.js       # Pure helper functions
+│           └── taskHelpers.js       
 │
 ├── backend/                         # Node.js + Express
-│   ├── server.js                    # Express entry point
+│   ├── server.js                    
 │   ├── package.json
 │   │
 │   ├── routes/
-│   │   ├── tasks.js                 # CRUD routes
+│   │   ├── tasks.js                
 │   │   └── rescue.js                # AI rescue plan route
 │   │
 │   ├── controllers/
-│   │   ├── tasksController.js       # Task logic (in-memory Day 1)
-│   │   └── rescueController.js      # Rescue plan logic (stub → AI Day 2)
+│   │   ├── tasksController.js       
+│   │   └── rescueController.js     
 │   │
 │   ├── services/
-│   │   └── geminiService.js         # Gemini API calls (Day 2)
+│   │   └── geminiService.js         # Gemini API calls 
 │   │
 │   └── middleware/
-│       └── errorHandler.js          # Global error handler
+│       └── errorHandler.js
 │
 ├── shared/
-│   └── taskSchema.js                # Shared constants (effort, status, etc.)
+│   └── taskSchema.js                
 │
-├── .env.example                     # Copy to .env and fill in keys
+├── .env.example                    
 ├── .gitignore
-├── package.json                     # Root (runs both with concurrently)
+├── package.json                     
 └── README.md
 ```
 
