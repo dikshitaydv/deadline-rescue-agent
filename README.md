@@ -106,4 +106,4 @@ cd backend  && npm run dev
 - **Frontend:** React 18, Vite, Tailwind CSS
 - **Backend:** Node.js, Express
 - **AI:** Gemini API via Google AI Studio
-- **Deploy:** Google Cloud Run (via AI Studio Build Mode)
+- **Deploy:** Frontend on Vercel and Backend on Render
