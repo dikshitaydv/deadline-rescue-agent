@@ -16,7 +16,14 @@ import rescueRoutes from './routes/rescue.js'
 const app  = express()
 const PORT = process.env.PORT || 5000
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://deadline-rescue-agent-eta.vercel.app'
+  ],
+  credentials: true
+}))
 app.use(express.json())
 
 app.use('/api/tasks',  taskRoutes)
